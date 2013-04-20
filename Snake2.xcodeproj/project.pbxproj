@@ -7,6 +7,15 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8434A48817133475004B7106 /* GameScene.m in Sources */ = {isa = PBXBuildFile; fileRef = 8434A48717133475004B7106 /* GameScene.m */; };
+		8434A48B17133487004B7106 /* Snake.m in Sources */ = {isa = PBXBuildFile; fileRef = 8434A48A17133487004B7106 /* Snake.m */; };
+		8434A48D171334FE004B7106 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8434A48C171334FE004B7106 /* Default-568h@2x.png */; };
+		8434A49017133836004B7106 /* GameBoard.m in Sources */ = {isa = PBXBuildFile; fileRef = 8434A48F17133836004B7106 /* GameBoard.m */; };
+		8434A4931713391D004B7106 /* Background.m in Sources */ = {isa = PBXBuildFile; fileRef = 8434A4921713391D004B7106 /* Background.m */; };
+		8482B2061719DA5000479072 /* candy.png in Resources */ = {isa = PBXBuildFile; fileRef = 8482B2051719DA5000479072 /* candy.png */; };
+		84A4759B171A0F6100FDEA70 /* d-pad.png in Resources */ = {isa = PBXBuildFile; fileRef = 84A4759A171A0F6100FDEA70 /* d-pad.png */; };
+		84AF3C93171B25A4000DF846 /* border-side.png in Resources */ = {isa = PBXBuildFile; fileRef = 84AF3C91171B25A4000DF846 /* border-side.png */; };
+		84AF3C94171B25A4000DF846 /* border-top.png in Resources */ = {isa = PBXBuildFile; fileRef = 84AF3C92171B25A4000DF846 /* border-top.png */; };
 		84D184EB171306EF0043F61E /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84D184EA171306EF0043F61E /* QuartzCore.framework */; };
 		84D184ED171306EF0043F61E /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84D184EC171306EF0043F61E /* OpenGLES.framework */; };
 		84D184EF171306EF0043F61E /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84D184EE171306EF0043F61E /* OpenAL.framework */; };
@@ -131,11 +140,25 @@
 		84D1866E171306F20043F61E /* vec4.c in Sources */ = {isa = PBXBuildFile; fileRef = 84D1866D171306F20043F61E /* vec4.c */; };
 		84D18673171306F20043F61E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 84D18672171306F20043F61E /* main.m */; };
 		84D18676171306F20043F61E /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 84D18675171306F20043F61E /* AppDelegate.m */; };
-		84D18679171306F20043F61E /* HelloWorldLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 84D18678171306F20043F61E /* HelloWorldLayer.m */; };
-		84D1867C171306F20043F61E /* IntroLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 84D1867B171306F20043F61E /* IntroLayer.m */; };
+		84D52F2317172FEC0038E6F5 /* dot.png in Resources */ = {isa = PBXBuildFile; fileRef = 84D52F2217172FEC0038E6F5 /* dot.png */; };
+		84ECEB5F171AE05100B28F18 /* InterfaceLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 84ECEB5E171AE05100B28F18 /* InterfaceLayer.m */; };
+		84F4FC0B171B1E5F0084B991 /* border-bottom.png in Resources */ = {isa = PBXBuildFile; fileRef = 84F4FC0A171B1E5F0084B991 /* border-bottom.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		8434A48617133475004B7106 /* GameScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameScene.h; sourceTree = "<group>"; };
+		8434A48717133475004B7106 /* GameScene.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameScene.m; sourceTree = "<group>"; };
+		8434A48917133487004B7106 /* Snake.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Snake.h; sourceTree = "<group>"; };
+		8434A48A17133487004B7106 /* Snake.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Snake.m; sourceTree = "<group>"; };
+		8434A48C171334FE004B7106 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
+		8434A48E17133836004B7106 /* GameBoard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameBoard.h; sourceTree = "<group>"; };
+		8434A48F17133836004B7106 /* GameBoard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameBoard.m; sourceTree = "<group>"; };
+		8434A4911713391D004B7106 /* Background.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Background.h; sourceTree = "<group>"; };
+		8434A4921713391D004B7106 /* Background.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Background.m; sourceTree = "<group>"; };
+		8482B2051719DA5000479072 /* candy.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = candy.png; path = Resources/candy.png; sourceTree = "<group>"; };
+		84A4759A171A0F6100FDEA70 /* d-pad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "d-pad.png"; path = "Resources/d-pad.png"; sourceTree = "<group>"; };
+		84AF3C91171B25A4000DF846 /* border-side.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "border-side.png"; path = "Resources/border-side.png"; sourceTree = "<group>"; };
+		84AF3C92171B25A4000DF846 /* border-top.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "border-top.png"; path = "Resources/border-top.png"; sourceTree = "<group>"; };
 		84D184E7171306EF0043F61E /* Snake2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Snake2.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		84D184EA171306EF0043F61E /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		84D184EC171306EF0043F61E /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
@@ -394,10 +417,10 @@
 		84D18672171306F20043F61E /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		84D18674171306F20043F61E /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		84D18675171306F20043F61E /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		84D18677171306F20043F61E /* HelloWorldLayer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HelloWorldLayer.h; sourceTree = "<group>"; };
-		84D18678171306F20043F61E /* HelloWorldLayer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HelloWorldLayer.m; sourceTree = "<group>"; };
-		84D1867A171306F20043F61E /* IntroLayer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IntroLayer.h; sourceTree = "<group>"; };
-		84D1867B171306F20043F61E /* IntroLayer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = IntroLayer.m; sourceTree = "<group>"; };
+		84D52F2217172FEC0038E6F5 /* dot.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = dot.png; path = ../../Snake/Snake/Resources/dot.png; sourceTree = "<group>"; };
+		84ECEB5D171AE05100B28F18 /* InterfaceLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InterfaceLayer.h; sourceTree = "<group>"; };
+		84ECEB5E171AE05100B28F18 /* InterfaceLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InterfaceLayer.m; sourceTree = "<group>"; };
+		84F4FC0A171B1E5F0084B991 /* border-bottom.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "border-bottom.png"; path = "Resources/border-bottom.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -420,9 +443,36 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		8434A49417133CA4004B7106 /* application */ = {
+			isa = PBXGroup;
+			children = (
+				84D18674171306F20043F61E /* AppDelegate.h */,
+				84D18675171306F20043F61E /* AppDelegate.m */,
+			);
+			name = application;
+			sourceTree = "<group>";
+		};
+		8434A49517133CB0004B7106 /* game */ = {
+			isa = PBXGroup;
+			children = (
+				8434A48617133475004B7106 /* GameScene.h */,
+				8434A48717133475004B7106 /* GameScene.m */,
+				8434A4911713391D004B7106 /* Background.h */,
+				8434A4921713391D004B7106 /* Background.m */,
+				84ECEB5D171AE05100B28F18 /* InterfaceLayer.h */,
+				84ECEB5E171AE05100B28F18 /* InterfaceLayer.m */,
+				8434A48E17133836004B7106 /* GameBoard.h */,
+				8434A48F17133836004B7106 /* GameBoard.m */,
+				8434A48917133487004B7106 /* Snake.h */,
+				8434A48A17133487004B7106 /* Snake.m */,
+			);
+			name = game;
+			sourceTree = "<group>";
+		};
 		84D184DE171306EF0043F61E = {
 			isa = PBXGroup;
 			children = (
+				8434A48C171334FE004B7106 /* Default-568h@2x.png */,
 				84D184FC171306EF0043F61E /* Snake2 */,
 				84D184E9171306EF0043F61E /* Frameworks */,
 				84D184E8171306EF0043F61E /* Products */,
@@ -456,12 +506,8 @@
 		84D184FC171306EF0043F61E /* Snake2 */ = {
 			isa = PBXGroup;
 			children = (
-				84D18674171306F20043F61E /* AppDelegate.h */,
-				84D18675171306F20043F61E /* AppDelegate.m */,
-				84D18677171306F20043F61E /* HelloWorldLayer.h */,
-				84D18678171306F20043F61E /* HelloWorldLayer.m */,
-				84D1867A171306F20043F61E /* IntroLayer.h */,
-				84D1867B171306F20043F61E /* IntroLayer.m */,
+				8434A49417133CA4004B7106 /* application */,
+				8434A49517133CB0004B7106 /* game */,
 				84D184FD171306EF0043F61E /* Resources */,
 				84D18517171306F00043F61E /* libs */,
 				84D18670171306F20043F61E /* Supporting Files */,
@@ -472,6 +518,12 @@
 		84D184FD171306EF0043F61E /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				84AF3C91171B25A4000DF846 /* border-side.png */,
+				84AF3C92171B25A4000DF846 /* border-top.png */,
+				84F4FC0A171B1E5F0084B991 /* border-bottom.png */,
+				84A4759A171A0F6100FDEA70 /* d-pad.png */,
+				8482B2051719DA5000479072 /* candy.png */,
+				84D52F2217172FEC0038E6F5 /* dot.png */,
 				84D184FE171306EF0043F61E /* Default.png */,
 				84D18500171306EF0043F61E /* Default-Landscape~ipad.png */,
 				84D18502171306EF0043F61E /* fps_images.png */,
@@ -895,6 +947,13 @@
 				84D18513171306F00043F61E /* Icon@2x.png in Resources */,
 				84D18516171306F00043F61E /* iTunesArtwork in Resources */,
 				84D18654171306F20043F61E /* ChangeLog in Resources */,
+				8434A48D171334FE004B7106 /* Default-568h@2x.png in Resources */,
+				84D52F2317172FEC0038E6F5 /* dot.png in Resources */,
+				8482B2061719DA5000479072 /* candy.png in Resources */,
+				84A4759B171A0F6100FDEA70 /* d-pad.png in Resources */,
+				84F4FC0B171B1E5F0084B991 /* border-bottom.png in Resources */,
+				84AF3C93171B25A4000DF846 /* border-side.png in Resources */,
+				84AF3C94171B25A4000DF846 /* border-top.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1007,8 +1066,11 @@
 				84D1866E171306F20043F61E /* vec4.c in Sources */,
 				84D18673171306F20043F61E /* main.m in Sources */,
 				84D18676171306F20043F61E /* AppDelegate.m in Sources */,
-				84D18679171306F20043F61E /* HelloWorldLayer.m in Sources */,
-				84D1867C171306F20043F61E /* IntroLayer.m in Sources */,
+				8434A48817133475004B7106 /* GameScene.m in Sources */,
+				8434A48B17133487004B7106 /* Snake.m in Sources */,
+				8434A49017133836004B7106 /* GameBoard.m in Sources */,
+				8434A4931713391D004B7106 /* Background.m in Sources */,
+				84ECEB5F171AE05100B28F18 /* InterfaceLayer.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1112,6 +1174,7 @@
 				84D18681171306F20043F61E /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

@@ -58,8 +58,9 @@
 	[self scheduleOnce:@selector(makeTransition:) delay:1];
 }
 
--(void) makeTransition:(ccTime)dt
+-(void)onExit
 {
-	[[CCDirector sharedDirector] replaceScene:[CCTransitionFade transitionWithDuration:1.0 scene:[HelloWorldLayer scene] withColor:ccWHITE]];
+    [super onExit];
+    // stop things
 }
 @end

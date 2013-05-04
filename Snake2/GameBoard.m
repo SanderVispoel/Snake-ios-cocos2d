@@ -24,12 +24,12 @@
 #define COLLISION_WALL  1
 #define COLLISION_CANDY 2
 
-#define HEAD_TAG        1
+#define TAG_HEAD        1
 
 @interface GameBoard()
 {
     // save snake tails in this CCNode
-    CCNode *_snakeParts;
+    CCNode *_tails;
     
     // save candy in a CCSprite
     CCSprite *_candy;
@@ -58,14 +58,15 @@
     
     [self unscheduleAllSelectors];
     [self stopAllActions];
-    [[[CCDirector sharedDirector] touchDispatcher] removeDelegate:self];
     
     [super dealloc];
 }
 
 -(void)onExit
-{   
-    [_snakeParts removeAllChildrenWithCleanup:YES];
+{
+    [[[CCDirector sharedDirector] touchDispatcher] removeDelegate:self];
+    
+    [_tails removeAllChildrenWithCleanup:YES];
     [_candy removeAllChildrenWithCleanup:YES];
     
     [super onExit];
@@ -78,8 +79,8 @@
     if((self=[super init])) {
         
         // snake ccnode
-        _snakeParts = [CCNode node];
-        [self addChild:_snakeParts];
+        _tails = [CCNode node];
+        [self addChild:_tails];
         
         // candy sprite
         _candy = [[CCSprite alloc] initWithFile:@"candy.png"];
@@ -112,11 +113,6 @@
         
         // save last tag
         _maxPartTag = 0;
-        
-        // enable touch
-        [[[CCDirector sharedDirector] touchDispatcher] addTargetedDelegate:self
-                                                                  priority:1
-                                                           swallowsTouches:YES];
     }
     
     return self;
@@ -126,6 +122,11 @@
 {
     [super onEnter];
     
+    // enable touch
+    [[[CCDirector sharedDirector] touchDispatcher] addTargetedDelegate:self
+                                                              priority:1
+                                                       swallowsTouches:YES];
+    
     // start game
     [self startGame];
 }
@@ -133,7 +134,7 @@
 -(void)startGame
 {
     // game restart
-    if ([[_snakeParts children] count] > 0) {
+    if ([[_tails children] count] > 0) {
         
         _maxPartTag = 0;
         [_interface setPlayerScore:0];
@@ -196,14 +197,14 @@
     Snake *new = [[Snake alloc] init];
     
     // add to our CCNode
-    [_snakeParts addChild:new];
+    [_tails addChild:new];
     
     // give tag
     new.tag = _maxPartTag+1;
     _maxPartTag = new.tag;
     
     // put first part (head) on the field and stop.
-    if (new.tag == HEAD_TAG) {
+    if (new.tag == TAG_HEAD) {
         new.position = ccp(64, 96); // bottom left
         return;
     }
@@ -211,54 +212,49 @@
     CGFloat x;
     CGFloat y;
     
-    for (Snake *tail in [_snakeParts children]) {
-        
-        // we only need the part made before the new one
-        if (tail.tag != (new.tag - 1))
-            continue;
-        
-        // check direction
-        // from that we decide where we can place our new part
-        switch (tail.directionFlag) {
-            case MOVE_RIGHT:
-                x = tail.position.x - SNAKE_WIDTH;
-                y = tail.position.y;
-                break;
-                
-            case MOVE_LEFT:
-                x = tail.position.x + SNAKE_WIDTH;
-                y = tail.position.y;
-                break;
+    Snake *tail = (Snake *)[_tails getChildByTag:(new.tag -1)];
+
+    // check direction
+    // from that we decide where we can place our new part
+    switch (tail.directionFlag) {
+        case MOVE_RIGHT:
+            x = tail.position.x - SNAKE_WIDTH;
+            y = tail.position.y;
+            break;
             
-            case MOVE_UP:
-                x = tail.position.x;
-                y = tail.position.y - SNAKE_HEIGHT;
-                break;
-                
-            case MOVE_DOWN:
-                x = tail.position.x;
-                y = tail.position.y + SNAKE_HEIGHT;
-                break;
-                
-            default:
-                break;
-        }
+        case MOVE_LEFT:
+            x = tail.position.x + SNAKE_WIDTH;
+            y = tail.position.y;
+            break;
         
-        // give him the current directionFlag of the last part
-        new.directionFlag = tail.directionFlag;
-        
-        // inherit arrays
-        // directionFlag and changePoint arrays are parallel
-        for (int i = 0; i < [tail getDirectionFlagsCount]; i++) {
+        case MOVE_UP:
+            x = tail.position.x;
+            y = tail.position.y - SNAKE_HEIGHT;
+            break;
             
-            // directionFlag
-            [new addDirectionFlag:[tail getDirectionFlagAtIndex:i]];
+        case MOVE_DOWN:
+            x = tail.position.x;
+            y = tail.position.y + SNAKE_HEIGHT;
+            break;
             
-            // same for changePoint
-            [new addChangePoint:[tail getChangePointAtIndex:i]];
-        }
+        default:
+            break;
     }
+
+    // give him the current directionFlag of the last part
+    new.directionFlag = tail.directionFlag;
     
+    // inherit arrays
+    // directionFlag and changePoint arrays are parallel
+    for (int i = 0; i < [tail getDirectionFlagsCount]; i++) {
+        
+        // directionFlag
+        [new addDirectionFlag:[tail getDirectionFlagAtIndex:i]];
+        
+        // same for changePoint
+        [new addChangePoint:[tail getChangePointAtIndex:i]];
+    }
+
     // and finally, place in field
     new.position = ccp(x,y);
 }
@@ -276,7 +272,7 @@
     [_fieldTaken removeAllObjects];
     
     // as last, fill new taken spots
-    for (Snake *s in [_snakeParts children]) {
+    for (Snake *s in [_tails children]) {
         [self addToFieldTaken:s];
         [self removeFromFieldOpen:s];
     }
@@ -301,10 +297,10 @@
     
     
     // add 'directionFlag' and 'changePoint' to our CCNode children
-    for (Snake *s in [_snakeParts children]) {
+    for (Snake *s in [_tails children]) {
         
         // don't need to add anything to head piece, it's controlled directly by us
-        if (s.tag == HEAD_TAG)
+        if (s.tag == TAG_HEAD)
             continue;
         
         [s addDirectionFlag:directionFlag];
@@ -328,7 +324,7 @@
     int hasCollided = 0;
     
     // look through all snake parts (not very efficient?)
-    for (Snake *s in [_snakeParts children]) {
+    for (Snake *s in [_tails children]) {
         
         // skip head, can't collide with itself
         if (s.tag == head.tag)
@@ -406,7 +402,7 @@
 -(void)gameTick:(ccTime)dt
 {
     // check if anything is hit before iterating throught the snake
-    Snake *head = (Snake *)[_snakeParts getChildByTag:HEAD_TAG];
+    Snake *head = (Snake *)[_tails getChildByTag:TAG_HEAD];
     
     int colCheck = [self collisionCheck:head.position DirectionFlag:head.directionFlag For:head];
     if (colCheck == COLLISION_CANDY) {
@@ -424,7 +420,7 @@
         return;
     }
     
-    for (Snake *s in [_snakeParts children]) {
+    for (Snake *s in [_tails children]) {
         
         CGFloat x = s.position.x;
         CGFloat y = s.position.y;
@@ -491,18 +487,14 @@
 
     // are we touching the dpad? If not, quit
     CGRect dpadBox = _dpad.boundingBox;
-    if (!CGRectContainsPoint(dpadBox, touchLocation)) {
+    if (!CGRectContainsPoint(dpadBox, touchLocation))
         return YES;
-    }
+    
+    if (!_tails)
+        return YES;
 
     // pak hoofd
-    Snake *snakeHead;
-    for (Snake *s in [_snakeParts children]) {
-        if (s.tag == HEAD_TAG) {
-            snakeHead = s;
-            break;
-        }
-    }
+    Snake *snakeHead = (Snake *)[_tails getChildByTag:TAG_HEAD];
     
     int dflag = MOVE_RIGHT;
     CGFloat tx = floor(touchLocation.x);

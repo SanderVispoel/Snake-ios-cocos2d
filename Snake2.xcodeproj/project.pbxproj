@@ -141,6 +141,7 @@
 		84D18673171306F20043F61E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 84D18672171306F20043F61E /* main.m */; };
 		84D18676171306F20043F61E /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 84D18675171306F20043F61E /* AppDelegate.m */; };
 		84D52F2317172FEC0038E6F5 /* dot.png in Resources */ = {isa = PBXBuildFile; fileRef = 84D52F2217172FEC0038E6F5 /* dot.png */; };
+		84D8558017356839008FF73A /* GameOverLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 84D8557F17356839008FF73A /* GameOverLayer.m */; };
 		84ECEB5F171AE05100B28F18 /* InterfaceLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 84ECEB5E171AE05100B28F18 /* InterfaceLayer.m */; };
 		84F4FC0B171B1E5F0084B991 /* border-bottom.png in Resources */ = {isa = PBXBuildFile; fileRef = 84F4FC0A171B1E5F0084B991 /* border-bottom.png */; };
 /* End PBXBuildFile section */
@@ -418,6 +419,8 @@
 		84D18674171306F20043F61E /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		84D18675171306F20043F61E /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		84D52F2217172FEC0038E6F5 /* dot.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = dot.png; path = ../../Snake/Snake/Resources/dot.png; sourceTree = "<group>"; };
+		84D8557E17356839008FF73A /* GameOverLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameOverLayer.h; sourceTree = "<group>"; };
+		84D8557F17356839008FF73A /* GameOverLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameOverLayer.m; sourceTree = "<group>"; };
 		84ECEB5D171AE05100B28F18 /* InterfaceLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InterfaceLayer.h; sourceTree = "<group>"; };
 		84ECEB5E171AE05100B28F18 /* InterfaceLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InterfaceLayer.m; sourceTree = "<group>"; };
 		84F4FC0A171B1E5F0084B991 /* border-bottom.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "border-bottom.png"; path = "Resources/border-bottom.png"; sourceTree = "<group>"; };
@@ -463,6 +466,8 @@
 				84ECEB5E171AE05100B28F18 /* InterfaceLayer.m */,
 				8434A48E17133836004B7106 /* GameBoard.h */,
 				8434A48F17133836004B7106 /* GameBoard.m */,
+				84D8557E17356839008FF73A /* GameOverLayer.h */,
+				84D8557F17356839008FF73A /* GameOverLayer.m */,
 				8434A48917133487004B7106 /* Snake.h */,
 				8434A48A17133487004B7106 /* Snake.m */,
 			);
@@ -1071,6 +1076,7 @@
 				8434A49017133836004B7106 /* GameBoard.m in Sources */,
 				8434A4931713391D004B7106 /* Background.m in Sources */,
 				84ECEB5F171AE05100B28F18 /* InterfaceLayer.m in Sources */,
+				84D8558017356839008FF73A /* GameOverLayer.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

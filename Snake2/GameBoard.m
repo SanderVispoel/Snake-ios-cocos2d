@@ -9,6 +9,7 @@
 #import "cocos2d.h"
 
 #import "InterfaceLayer.h"
+#import "GameOverLayer.h"
 #import "GameBoard.h"
 #import "Snake.h"
 
@@ -20,25 +21,21 @@
 #define FIELD_WIDTH     472
 #define FIELD_HEIGHT    240
 
+#define COLLISION_WALL  1
+#define COLLISION_CANDY 2
+
+#define HEAD_TAG        1
+
 @interface GameBoard()
 {
-    // save snake parts (dots) in this CCNode
+    // save snake tails in this CCNode
     CCNode *_snakeParts;
     
-    // save candy in this CCNode
-    CCNode *_candy;
+    // save candy in a CCSprite
+    CCSprite *_candy;
     
     // score handling
     InterfaceLayer *_interface;
-    
-    // this is a weird one. I wanted to have a GAME OVER text pop-up when you hit walls/yourself
-    // but to let this stay before the game restarts after a few seconds, I had to put it in an invar
-    // else it would instantly dissapear.
-    // for a better insight on this, check the GameOver method (line 144)
-    CCLabelTTF *_gameOverTxt;
-    
-    // weird one as well. See bottom of gameTick: for explanation (line 538)
-    BOOL _hasHitCandy;
     
     NSMutableArray *_fieldOpen;
     NSMutableArray *_fieldTaken;
@@ -54,19 +51,22 @@
 
 -(void)dealloc
 {
+    [_fieldOpen release];
+    _fieldOpen = nil;
+    [_fieldTaken release];
+    _fieldTaken = nil;
+    
+    [self unscheduleAllSelectors];
+    [self stopAllActions];
+    [[[CCDirector sharedDirector] touchDispatcher] removeDelegate:self];
+    
     [super dealloc];
 }
 
 -(void)onExit
-{
+{   
     [_snakeParts removeAllChildrenWithCleanup:YES];
     [_candy removeAllChildrenWithCleanup:YES];
-    [_fieldOpen removeAllObjects];
-    [_fieldTaken removeAllObjects];
-    
-    [[[CCDirector sharedDirector] touchDispatcher] removeDelegate:self];
-    [self unscheduleAllSelectors];
-    [self stopAllActions];
     
     [super onExit];
 }
@@ -81,24 +81,20 @@
         _snakeParts = [CCNode node];
         [self addChild:_snakeParts];
         
-        // candy ccnode
-        _candy = [CCNode node];
+        // candy sprite
+        _candy = [[CCSprite alloc] initWithFile:@"candy.png"];
         [self addChild:_candy];
         
         // score
         _interface = [[InterfaceLayer alloc] init];
+        [_interface setPlayerScorePositionX:64.0 Y:32.0];
         [self addChild:_interface];
         
         // dpad sprite
         _dpad = [[CCSprite alloc] initWithFile:@"d-pad.png"];
         _dpad.position = ccp( (480 - (64/2)) - 8, (64/2) ); // screen height - dpad's height(also width) divided by 2, - 8px correction.
         _dpad.tag = 1;
-        
         [self addChild:_dpad];
-        
-        // Game Over Text
-        _gameOverTxt = [[CCLabelTTF alloc] initWithString:@"" fontName:@"Arial" fontSize:56];
-        [self addChild:_gameOverTxt];
         
         // saves open and taken field spots
         _fieldOpen = [[NSMutableArray alloc] init];
@@ -117,11 +113,7 @@
         // save last tag
         _maxPartTag = 0;
         
-        // candy check
-        _hasHitCandy = false;
-        
         // enable touch
-        self.isTouchEnabled = YES; // doesn't work?
         [[[CCDirector sharedDirector] touchDispatcher] addTargetedDelegate:self
                                                                   priority:1
                                                            swallowsTouches:YES];
@@ -142,13 +134,9 @@
 {
     // game restart
     if ([[_snakeParts children] count] > 0) {
-        [_gameOverTxt setString:@""];
         
         _maxPartTag = 0;
         [_interface setPlayerScore:0];
-        
-        [_snakeParts removeAllChildrenWithCleanup:YES];
-        [_candy removeAllChildrenWithCleanup:YES];
         
         [_interface setPlayerScorePositionX:64 Y:32];
     }
@@ -163,26 +151,12 @@
 {
     // TODO show Menu
     
-    // show GAME OVER
-    [_gameOverTxt setString:@"GAME OVER"];
-    
-    CGFloat midX = [[CCDirector sharedDirector] winSize].width/2;
-    CGFloat midY = [[CCDirector sharedDirector] winSize].height/2+45;
-    _gameOverTxt.position = ccp(midX, midY);
-    
-    // put score below the GAME OVER text
-    [_interface setPlayerScorePositionX:midX Y:midY-35.0];
-    
     // stop Game
     [self unscheduleAllSelectors];
     [self stopAllActions];
     
-    // start new game after 3 seconds
-    [self scheduleOnce:@selector(startGame) delay:3.0];
-    
-    // if I wanted to get rid of the GAME OVER text here
-    // it would instantly dissapear after being set above.
-    // I can't pass it on to startGame in the scheduleOnce method either
+    CCScene *gameOverScene = [GameOverLayer sceneGameOver:_interface];
+    [[CCDirector sharedDirector] replaceScene:gameOverScene];
 }
 
 #pragma mark - world stuff
@@ -229,7 +203,7 @@
     _maxPartTag = new.tag;
     
     // put first part (head) on the field and stop.
-    if (new.tag == 1) {
+    if (new.tag == HEAD_TAG) {
         new.position = ccp(64, 96); // bottom left
         return;
     }
@@ -293,16 +267,6 @@
 {
     int randPos = 0;
     
-    // reset this invar
-    _hasHitCandy = false;
-    
-    // remove if there is already one on the field
-    if ([[_candy children] count] > 0) {
-        CCNode *candy = [_candy getChildByTag:1];
-
-        [candy removeFromParentAndCleanup:YES];
-    }
-    
     // first add taken spots back to open
     for (NSValue *value in _fieldTaken) {
         [_fieldOpen addObject:value];
@@ -324,13 +288,8 @@
     // random through OpenField array
     randPos = arc4random() % [_fieldOpen count];
     
-    // maak candy sprite
-    CCSprite *candy = [[CCSprite alloc] initWithFile:@"candy.png"];
-    [_candy addChild:candy];
-    
-    // give tag and position
-    candy.tag = 1;
-    candy.position = [[_fieldOpen objectAtIndex:randPos] CGPointValue];
+    // give new position
+    _candy.position = [[_fieldOpen objectAtIndex:randPos] CGPointValue];
 }
 
 
@@ -344,6 +303,10 @@
     // add 'directionFlag' and 'changePoint' to our CCNode children
     for (Snake *s in [_snakeParts children]) {
         
+        // don't need to add anything to head piece, it's controlled directly by us
+        if (s.tag == HEAD_TAG)
+            continue;
+        
         [s addDirectionFlag:directionFlag];
         [s addChangePoint:coords];
     }
@@ -353,24 +316,21 @@
 }
 
 
--(BOOL)collisionCheck:(CGPoint)pos DirectionFlag:(int)flag For:(Snake *)head
+-(int)collisionCheck:(CGPoint)pos DirectionFlag:(int)flag For:(Snake *)head
 {
-    // candy
-    CCNode *candy = [_candy getChildByTag:1];
-    
-    CGFloat candyX = candy.position.x;
-    CGFloat candyY = candy.position.y;
+    CGFloat candyX = _candy.position.x;
+    CGFloat candyY = _candy.position.y;
     
     // snake tail
     CGFloat tailX;
     CGFloat tailY;
     
-    BOOL hasCollided = false;
+    int hasCollided = 0;
     
     // look through all snake parts (not very efficient?)
     for (Snake *s in [_snakeParts children]) {
         
-        // skip head
+        // skip head, can't collide with itself
         if (s.tag == head.tag)
             continue;
         
@@ -389,10 +349,6 @@
                 nextX = pos.x + SNAKE_WIDTH;
                 nextY = pos.y;
                 
-                if (tailX == nextX && tailY == nextY) {
-                    hasCollided = true;
-                }
-                
                 if (nextX > WALL_RIGHT) {
                     hasCollided = true;
                 }
@@ -403,10 +359,6 @@
             {
                 nextX = pos.x - SNAKE_WIDTH;
                 nextY = pos.y;
-                
-                if (tailX == nextX && tailY == nextY) {
-                    hasCollided = true;
-                }
 
                 if (nextX < WALL_LEFT) {
                     hasCollided = true;
@@ -418,10 +370,6 @@
             {
                 nextX = pos.x;
                 nextY = pos.y + SNAKE_HEIGHT;
-                
-                if (tailX == nextX && tailY == nextY) {
-                    hasCollided = true;
-                }
 
                 if (nextY > WALL_TOP) {
                     hasCollided = true;
@@ -433,10 +381,6 @@
             {
                 nextX = pos.x;
                 nextY = pos.y - SNAKE_HEIGHT;
-                
-                if (tailX == nextX && tailY == nextY) {
-                    hasCollided = true;
-                }
 
                 if (nextY < WALL_BOTTOM) {
                     hasCollided = true;
@@ -447,11 +391,13 @@
             default:
                 break;
         }
+        
+        // wall check
+        if (nextX == tailX && nextY == tailY)
+            hasCollided = COLLISION_WALL;
 
-        // candy! Update/explanation in GameTick:
-        if (nextX == candyX && nextY == candyY) {
-            _hasHitCandy = true;
-        }
+        if (nextX == candyX && nextY == candyY)
+            hasCollided = COLLISION_CANDY;
     }
     
     return hasCollided;
@@ -459,9 +405,26 @@
 
 -(void)gameTick:(ccTime)dt
 {
-    for (Snake *s in [_snakeParts children]) {
+    // check if anything is hit before iterating throught the snake
+    Snake *head = (Snake *)[_snakeParts getChildByTag:HEAD_TAG];
+    
+    int colCheck = [self collisionCheck:head.position DirectionFlag:head.directionFlag For:head];
+    if (colCheck == COLLISION_CANDY) {
         
-        BOOL hasCollided = false;
+        // update score
+        [_interface addScore:10];
+        
+        // grow snake
+        [self addSnakePartToField];
+        [self placeCandy];
+    } else if (colCheck == COLLISION_WALL) {
+        
+        // quit game
+        [self gameOver];
+        return;
+    }
+    
+    for (Snake *s in [_snakeParts children]) {
         
         CGFloat x = s.position.x;
         CGFloat y = s.position.y;
@@ -469,13 +432,6 @@
         // Loop through the points, check coordinates.
         // if we are on one of the points, change directionFlag.
         for (int i = 0; i < [s getDirectionFlagsCount]; i++) {
-            
-            // hoofd doesn't need to store data in arrays, we control it
-            if (s.tag == 1) {
-                [s removeDirectionFlagAtIndex:i];
-                [s removeChangePointAtIndex:i];
-                break;
-            }
             
             CGPoint changeDirectionXY = [s getChangePointAtIndex:i];
             
@@ -495,65 +451,32 @@
             }
         }
         
-        // check collision only with head part
-        if (s.tag == 1) {
-            hasCollided = [self collisionCheck:s.position DirectionFlag:s.directionFlag For:s];
-        }
-        
-        if (!hasCollided) {
-            
-            // directionFlag + movement
-            switch (s.directionFlag) {
-                case MOVE_RIGHT: {
-                    x += SNAKE_WIDTH;
-                    break;
-                }
-                case MOVE_LEFT: {
-                    x -= SNAKE_WIDTH;
-                    break;
-                }
-                case MOVE_UP: {
-                    y += SNAKE_HEIGHT;
-                    break;
-                }
-                case MOVE_DOWN: {
-                    y -= SNAKE_HEIGHT;
-                    break;
-                }
-                default:
-                    // MOVE_RIGHT
-                    x += SNAKE_WIDTH;
-                    break;
+        // directionFlag + movement
+        switch (s.directionFlag) {
+            case MOVE_RIGHT: {
+                x += SNAKE_WIDTH;
+                break;
             }
-            
-            // set position
-            s.position = ccp(x,y);
-        } else {
-            
-            // game over!
-            [self gameOver];
-            
-            // stop the forin
-            break;
+            case MOVE_LEFT: {
+                x -= SNAKE_WIDTH;
+                break;
+            }
+            case MOVE_UP: {
+                y += SNAKE_HEIGHT;
+                break;
+            }
+            case MOVE_DOWN: {
+                y -= SNAKE_HEIGHT;
+                break;
+            }
+            default:
+                // MOVE_RIGHT
+                x += SNAKE_WIDTH;
+                break;
         }
-    }
     
-    //
-    // CANDY CHECK
-    //
-    
-    // Candy Check is done here with an instance variable
-    // Doing it in a different method while in the above forin loop will cause a bad access crash
-    // or a black gap in the snake's tail (not sure why)
-    
-    // place candy if candy is hit
-    if (_hasHitCandy) {
-        // update score
-        [_interface addScore:10];
-        
-        // grow snake
-        [self addSnakePartToField];
-        [self placeCandy];
+        // set position
+        s.position = ccp(x,y);
     }
 }
 
@@ -566,7 +489,7 @@
     
     //    CGSize s = [[CCDirector sharedDirector] winSize];
 
-    // raken we de dpad aan? Zo niet, stop hier
+    // are we touching the dpad? If not, quit
     CGRect dpadBox = _dpad.boundingBox;
     if (!CGRectContainsPoint(dpadBox, touchLocation)) {
         return YES;
@@ -575,7 +498,7 @@
     // pak hoofd
     Snake *snakeHead;
     for (Snake *s in [_snakeParts children]) {
-        if (s.tag == 1) {
+        if (s.tag == HEAD_TAG) {
             snakeHead = s;
             break;
         }

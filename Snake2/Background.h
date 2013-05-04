@@ -8,6 +8,10 @@
 
 #import "CCLayer.h"
 
-@interface Background : CCLayer
+@interface Background : CCLayerColor {
+    
+}
+
+-(void)onEnter;
 
 @end

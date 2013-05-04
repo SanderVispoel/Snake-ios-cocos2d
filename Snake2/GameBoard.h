@@ -31,7 +31,7 @@
 -(void)addSnakePartToField;
 -(void)placeCandy;
 -(void)changeDirectionPoint:(int)directionFlag coords:(CGPoint)coords from:(Snake *)head;
--(BOOL)collisionCheck:(CGPoint)pos DirectionFlag:(int)flag For:(Snake *)head;
+-(int)collisionCheck:(CGPoint)pos DirectionFlag:(int)flag For:(Snake *)head;
 -(void)gameTick:(ccTime)dt;
 
 // touch

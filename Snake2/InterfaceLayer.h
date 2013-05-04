@@ -15,6 +15,7 @@
 
 @property (nonatomic, assign) int playerScore;
 
+-(CCLabelTTF *)getPlayerScoreTxt;
 -(void)addScore:(int)value;
 -(void)setPlayerScorePositionX:(CGFloat)x Y:(CGFloat)y;
 

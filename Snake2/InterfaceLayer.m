@@ -35,6 +35,11 @@
     return self;
 }
 
+-(CCLabelTTF *)getPlayerScoreTxt
+{
+    return [CCLabelTTF labelWithString:[NSString stringWithFormat:@"Score: %i", _playerScore] fontName:@"Arial" fontSize:20];
+}
+
 -(void)setPlayerScore:(int)playerScore
 {
     _playerScore = playerScore;
